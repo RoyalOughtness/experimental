@@ -4,6 +4,8 @@ on:
     - cron:
         "00 09 * * *"
   push:
+    branches-ignore:
+      - 'dependabot/**'
     paths-ignore:
       - "**.md"
 
