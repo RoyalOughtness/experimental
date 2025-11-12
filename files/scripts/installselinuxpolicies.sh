@@ -5,6 +5,6 @@
 # builds actually ran successfully without any errors!
 set -oue pipefail
 
-# Your code goes here.
-echo 'This is an example shell script'
-echo 'Scripts here will run during build if specified in recipe.yml'
+make -f /usr/share/selinux/devel/Makefile qbittorrent.pp
+semodule -v -i qbittorrent.pp
+restorecon -FRv /usr
