@@ -23,6 +23,7 @@ gen_require(`
 	type config_home_t;
   type net_conf_t;
   type init_t;
+  type http_cache_port_t;
 ')
 
 allow qbittorrent_t self:unix_dgram_socket { ioctl write create getopt setopt };
