@@ -70,15 +70,6 @@ template(`qbittorrent_role_template',`
 		')
 		xserver_user_x_domain_template($1_qbittorrent, $1_qbittorrent_t, user_tmpfs_t)
 	')
-
-	# Trivalent-Flatpak integration
-	# uncomment this once new flatpak policy is in use
-	# optional_policy(`
-	# 	flatpak_role_template($1_qbittorrent, $2, $1_qbittorrent_t, $1_t)
-	# 	allow $1_qbittorrent_t $1_qbittorrent_flatpak_t:process2 { nnp_transition nosuid_transition };
-	# 	write_fifo_files_pattern($1_qbittorrent_flatpak_t, $1_qbittorrent_script_t, $1_qbittorrent_script_t)
-	# 	# write_fifo_files_pattern($3, $1_qbittorrent_script_t, $1_qbittorrent_script_t)
-	# ')
 ')
 
 
