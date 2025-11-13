@@ -35,7 +35,7 @@ allow qbittorrent_t self:udp_socket { setopt read bind write create getattr conn
 allow qbittorrent_t http_cache_port_t:tcp_socket { name_bind };
 allow qbittorrent_t cache_home_t:dir search_dir_perms;
 allow qbittorrent_t user_home_dir_t:dir search_dir_perms;
-
+allow qbittorrent_t container_file_t:file { map };
 allow init_t qbittorrent_t:process { siginh };
 
 gnome_manage_home_config(qbittorrent_t)
