@@ -19,8 +19,6 @@ application_domain(qbittorrent_t, qbittorrent_exec_t)
 
 role qbittorrent_roles types qbittorrent_t;
 
-unconfined_domain_noaudit(qbittorrent_t)
-
 optional_policy(`
 	gen_require(`
 		type unconfined_t;
