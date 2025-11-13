@@ -38,4 +38,4 @@ gen_require(`
 
 gnome_manage_home_config(qbittorrent_t)
 manage_sock_files_pattern(qbittorrent_t, cache_home_t, cache_home_t)
-miscfiles_manage_all_certs(qbittorrent_t)
+miscfiles_read_all_certs(qbittorrent_t)
