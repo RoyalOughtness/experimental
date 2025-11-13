@@ -22,7 +22,18 @@ optional_policy(`
 gen_require(`
 	type config_home_t;
   type net_conf_t;
+  type init_t;
 ')
+
+allow qbittorrent_t self:unix_dgram_socket { ioctl write create getopt setopt };
+allow qbittorrent_t self:netlink_route_socket { write read setopt bind create nlmsg_read getattr ioctl };
+allow qbittorrent_t self:tcp_socket { write setopt accept getattr read getopt bind create listen connect };
+allow qbittorrent_t self:udp_socket { setopt read bind write create getattr connect ioctl };
+allow qbittorrent_t http_cache_port_t:tcp_socket { name_bind };
+allow qbittorrent_t cache_home_t:dir search_dir_perms;
+allow qbittorrent_t user_home_dir_t:dir search_dir_perms;
+
+allow init_t qbittorrent_t:process { siginh };
 
 gnome_manage_home_config(qbittorrent_t)
 gnome_manage_home_config_dirs(qbittorrent_t)
@@ -43,3 +54,4 @@ init_search_pid_dirs(qbittorrent_t)
 read_files_pattern(qbittorrent_t, net_conf_t, net_conf_t)
 fs_getattr_xattr_fs(qbittorrent_t)
 dev_read_sysfs(qbittorrent_t)
+storage_getattr_fixed_disk_dev(qbittorrent_t)
