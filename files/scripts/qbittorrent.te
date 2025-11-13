@@ -12,14 +12,10 @@ role qbittorrent_roles types qbittorrent_t;
 
 optional_policy(`
 	gen_require(`
-		type unconfined_t;
 		type init_t;
-		attribute trivalent_domain;
 		role unconfined_r;
 	')
 
-	qbittorrent_run(unconfined_t, unconfined_r)
-	qbittorrent_run(trivalent_domain, unconfined_r)
 	qbittorrent_run(init_t, system_r)
 ')
 
