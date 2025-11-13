@@ -24,6 +24,7 @@ unconfined_domain_noaudit(qbittorrent_t)
 optional_policy(`
 	gen_require(`
 		type unconfined_t;
+		type init_t;
 		attribute trivalent_domain;
 		role unconfined_r;
 	')
