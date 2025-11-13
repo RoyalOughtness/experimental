@@ -1,14 +1,5 @@
 policy_module(qbittorrent, 1.0.0)
 
-# SPDX-FileCopyrightText 2025 The Secureblue Authors
-#
-# SPDX-License-Identifier: Apache-2.0 OR MIT
-
-########################################
-#
-# Declarations
-#
-
 attribute_role qbittorrent_roles;
 roleattribute object_r qbittorrent_roles;
 
