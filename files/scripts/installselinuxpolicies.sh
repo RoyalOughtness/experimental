@@ -7,4 +7,5 @@ set -oue pipefail
 
 make -f /usr/share/selinux/devel/Makefile qbittorrent.pp
 semodule -v -i qbittorrent.pp
+semodule -B
 restorecon -FRv /usr
