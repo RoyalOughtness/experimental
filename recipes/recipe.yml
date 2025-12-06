@@ -6,11 +6,15 @@ image-version: latest
 
 modules:
   - type: script
+    source: ghcr.io/blue-build/modules@sha256:50747361c625c0a5afac314f174243ca7d14373dbbdd20e2261c1f9384a632de
     scripts:
       - installselinuxpolicies.sh
   - type: dnf
-    packages:
-      install:
+    source: ghcr.io/blue-build/modules@sha256:50747361c625c0a5afac314f174243ca7d14373dbbdd20e2261c1f9384a632de
+    install:
+      install-weak-deps: false
+      packages:
         - qbittorrent-nox
         - libnatpmp
   - type: signing
+    source: ghcr.io/blue-build/modules@sha256:50747361c625c0a5afac314f174243ca7d14373dbbdd20e2261c1f9384a632de
