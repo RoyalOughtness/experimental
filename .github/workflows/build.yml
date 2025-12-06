@@ -46,10 +46,63 @@ jobs:
           sudo swapoff -a || true
           sudo rm -f /mnt/swapfile || true
 
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          sudo apt install yq
+
       - name: Checkout repo
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
+
+      - name: Gather image data from recipe
+        shell: bash
+        env:
+          RECIPE: ${{ inputs.recipe }}
+        run: |
+          echo "REGISTRY=ghcr.io/secureblue" >> "${GITHUB_ENV}"
+          echo "IMAGE_NAME=$(yq -r '."name"' "./recipes/${RECIPE}")" >> "${GITHUB_ENV}"
+          echo "BASE_IMAGE=$(yq -r '."base-image"' "./recipes/${RECIPE}")" >> "${GITHUB_ENV}"
+          echo "BASE_IMAGE_VERSION=$(yq -r '."image-version"' "./recipes/${RECIPE}")" >> "${GITHUB_ENV}"
+
+      - name: Verify base image provenance
+        shell: bash
+        run: |
+          if [[ "$BASE_IMAGE" != ghcr.io/secureblue/* ]]; then
+            echo "Base image isn't secureblue. Skipping."
+            exit 0
+          fi
+
+          go install github.com/slsa-framework/slsa-verifier/v2/cli/slsa-verifier@v2.7.1
+          go install github.com/google/go-containerregistry/cmd/crane@v0.20.6
+          DIGEST=$(~/go/bin/crane digest "${BASE_IMAGE}:${BASE_IMAGE_VERSION}")
+          ~/go/bin/slsa-verifier verify-image --source-uri 'github.com/secureblue/secureblue' "${BASE_IMAGE}:${BASE_IMAGE_VERSION}@${DIGEST}"
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad # v4.0.0
+        with:
+          cosign-release: 'v2.6.0'
+
+      - name: Verify base image
+        shell: bash
+        run: |
+          if [[ "$IMAGE_NAME" == 'securecore-main-hardened' || "$IMAGE_NAME" == 'iot-main-hardened' ]]; then
+            echo "Upstream isn't signed. Skipping."
+            exit 0
+          fi
+
+          UPSTREAM_CONTAINER="${BASE_IMAGE}:${BASE_IMAGE_VERSION}"
+          if [[ "$BASE_IMAGE" == ghcr.io/secureblue/* ]]; then
+            UPSTREAM_PUBKEY='https://raw.githubusercontent.com/secureblue/secureblue/refs/heads/live/cosign.pub'
+          else
+            UPSTREAM_PUBKEY='https://gitlab.com/fedora/ostree/ci-test/-/raw/main/quay.io-fedora-ostree-desktops.pub'
+          fi
+          if ! cosign verify --key "${UPSTREAM_PUBKEY}" "${UPSTREAM_CONTAINER}" | jq; then
+            echo "NOTICE: Verification failed. Please ensure your public key is correct."
+            exit 1
+          fi
 
       - name: Build Custom Image
         uses: blue-build/github-action@f75115e12966070fc35d6be3aab528848c9c979f # v1.10.2
