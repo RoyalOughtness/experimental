@@ -27,7 +27,6 @@ jobs:
         recipe:
           - recipe.yml
     steps:
-
       - name: Optimize build times
         shell: bash
         run: |
@@ -46,7 +45,6 @@ jobs:
           sudo swapoff -a || true
           sudo rm -f /mnt/swapfile || true
 
-
       - name: Install dependencies
         shell: bash
         run: |
@@ -60,7 +58,7 @@ jobs:
       - name: Gather image data from recipe
         shell: bash
         env:
-          RECIPE: ${{ inputs.recipe }}
+          RECIPE: "recipe.yml"
         run: |
           echo "REGISTRY=ghcr.io/secureblue" >> "${GITHUB_ENV}"
           echo "IMAGE_NAME=$(yq -r '."name"' "./recipes/${RECIPE}")" >> "${GITHUB_ENV}"
