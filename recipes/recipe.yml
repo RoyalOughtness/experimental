@@ -8,4 +8,9 @@ modules:
   - type: script
     scripts:
       - installselinuxpolicies.sh
+  - type: dnf
+    packages:
+      install:
+        - qbittorrent-nox
+        - libnatpmp
   - type: signing
