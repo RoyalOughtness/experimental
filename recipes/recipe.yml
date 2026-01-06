@@ -1,7 +1,7 @@
 name: experimental
 description: This is my personal OS image.
 
-base-image: ghcr.io/secureblue/iot-main-hardened
+base-image: ghcr.io/secureblue/securecore-main-hardened
 image-version: latest
 
 modules:
