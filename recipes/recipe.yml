@@ -6,15 +6,44 @@ image-version: latest
 
 modules:
   - type: script
-    source: ghcr.io/blue-build/modules@sha256:50747361c625c0a5afac314f174243ca7d14373dbbdd20e2261c1f9384a632de
+    source: ghcr.io/blue-build/modules@sha256:3c04c323f281bdb1ab88148a2335608344bcc07c6c4d2f5f777063a16554256d
     scripts:
       - installselinuxpolicies.sh
   - type: dnf
-    source: ghcr.io/blue-build/modules@sha256:50747361c625c0a5afac314f174243ca7d14373dbbdd20e2261c1f9384a632de
+    source: ghcr.io/blue-build/modules@sha256:3c04c323f281bdb1ab88148a2335608344bcc07c6c4d2f5f777063a16554256d
     install:
       install-weak-deps: false
       packages:
         - qbittorrent-nox
         - libnatpmp
+    remove:
+      packages:
+        - sssd-nfs-idmap
+        - sssd-client
+        - sssd-common
+        - sssd-krb5-common
+        - sssd-common-pac
+        - sssd-ad
+        - sssd-ipa
+        - sssd-krb5
+        - sssd-ldap
+        - lvm2-libs
+        - lvm2
+        - device-mapper-multipath
+        - mdadm
+        - irqbalance
+        - iscsi-initiator-utils
+        - iscsi-initiator-utils-iscsiuio
+
+  - type: systemd    
+    source: ghcr.io/blue-build/modules@sha256:3c04c323f281bdb1ab88148a2335608344bcc07c6c4d2f5f777063a16554256d
+    system:
+      masked:
+        - docker.service
+        - dm-event.service
+        - coreos-liveiso-success.service
+        - clevis-luks-askpass.service
+        - unbound.service
+        - rpc-gssd.service
   - type: signing
-    source: ghcr.io/blue-build/modules@sha256:50747361c625c0a5afac314f174243ca7d14373dbbdd20e2261c1f9384a632de
+    source: ghcr.io/blue-build/modules@sha256:3c04c323f281bdb1ab88148a2335608344bcc07c6c4d2f5f777063a16554256d
